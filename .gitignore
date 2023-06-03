@@ -1,0 +1,7 @@
+/uploads
+/vendor
+/tests
+/PHPMailer-master
+dbconnections/password%forgotten%users%and%codes.json
+testlogin.html
+testwebsocket.html
