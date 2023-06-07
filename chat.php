@@ -62,7 +62,7 @@ class Chat{
      */
     public function __construct($Chatdata = null) {
         $this->connection_to_db = new chatDB();
-        if (!is_null($Chatdata)) {
+        if (is_array($Chatdata)) {
             $this->message = $Chatdata["message"];
             $this->sent_from = $Chatdata["sent_from"];
             $this->attached_file = $Chatdata["attached_file"];

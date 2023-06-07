@@ -68,7 +68,7 @@ class chatDB{
      */
     public function get_all_chats(){
         $query = mysqli_query($this->conn,"SELECT * FROM chats WHERE 1");
-        $all_chats = mysqli_fetch_all($query,MYSQL_ASSOC);
+        $all_chats = mysqli_fetch_all($query,MYSQLI_ASSOC);
         return $all_chats;
     }
 
@@ -95,7 +95,7 @@ class chatDB{
         $Sender_id = mysqli_real_escape_string($this->conn,$Sender_id);
         $query = mysqli_query($this->conn,"SELECT * FROM chats WHERE sent_from = '{$Sender_id}' 
                                                         OR sent_to = '{$Sender_id}'");
-        $chats = mysqli_fetch_all($query,MYSQL_ASSOC);
+        $chats = mysqli_fetch_all($query,MYSQLI_ASSOC);
         return $chats;
     }
 
@@ -109,7 +109,7 @@ class chatDB{
         $Date = mysqli_real_escape_string($this->conn,$Date);
         $query = mysqli_query($this->conn,"SELECT * FROM chats 
                                     WHERE send_date_and_time = '{$Date}'");
-        $chats = mysqli_fetch_all($query,MYSQL_ASSOC);
+        $chats = mysqli_fetch_all($query,MYSQLI_ASSOC);
         return $chats;
     }
 

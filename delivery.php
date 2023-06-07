@@ -206,18 +206,20 @@ class delivery{
     }
 
     /**
-     * Summary of initialize_from_db
+     * gets a delivery from the database and initializes the class with the gotten information
      * @param string $delivery_id
      * @return void
      */
     private function initialize_from_db($delivery_id){
         $delivery_data = $this->get_delivery_using_id($delivery_id);
-        $this->unique_id = $delivery_data["unique_id"];
-        $this->initialize_from_array($delivery_data);
+        if(is_array($delivery_data)){
+            $this->unique_id = $delivery_data["unique_id"];
+            $this->initialize_from_array($delivery_data);
+        }
     }
 
     /**
-     * Summary of get_delivery_using_id
+     * gets a delivery using its id
      * @param string $delivery_id
      * @return array
      */
@@ -226,7 +228,7 @@ class delivery{
     }
 
     /**
-     * Summary of initialize_from_array
+     * initializes the class from an array containing the delivery details
      * @param array $delivery_array_data
      * @return void
      */
@@ -283,7 +285,8 @@ class delivery{
     }
 
     /**
-     * Summary of create_new_delivery
+     * creates a new delivery
+     * should be called after all public properties of this class instance has been set
      * @return bool
      */
     public function create_new_delivery(){
@@ -325,7 +328,7 @@ class delivery{
     }
 
     /**
-     * Summary of get_delivery
+     * gets delivery data from the database using the delivery id
      * @param mixed $delivery_id
      * @return mixed
      */
@@ -451,7 +454,7 @@ class delivery{
     }
 
     /**
-     * Summary of update_delivery_detail
+     * updates a part of the delivery data
      * @param mixed $column
      * @param mixed $value
      * @param mixed $delivery_id
@@ -480,7 +483,7 @@ class delivery{
     }
 
     /**
-     * Summary of delete_delivery
+     * deletes a delivery from the database
      * @return mixed
      */
     public function delete_delivery(){

@@ -38,7 +38,7 @@ class order{
 
     /**
      * the id of the delivery.
-     * Set this using the `assign_delivery()` function so ot gets saved in the database.
+     * Set this using the `assign_delivery()` function so it gets saved in the database.
      * @var string
      */
     public $delivery_id; 
@@ -303,6 +303,17 @@ class order{
         if(is_null($seller_id))
             return $this->order_db->get_non_accepted_orders_through_seller($this->seller_id);
         return $this->order_db->get_non_accepted_orders_through_seller($seller_id);
+    }
+
+    /**
+     * Get all orders related to a buyer
+     * @param string $buyer_id
+     * @return array
+     */
+    public function get_buyer_orders($buyer_id = null){
+        if(is_null($buyer_id))
+            return $this->order_db->get_orders_through_buyer($this->buyer_id);
+        return $this->order_db->get_orders_through_buyer($buyer_id);
     }
 
     /**

@@ -11,7 +11,6 @@ use Ratchet\ConnectionInterface;
 
 class ChatConnection implements MessageComponentInterface{
 
-    protected $clients;
 
     protected $messageclients;
 
@@ -44,7 +43,6 @@ class ChatConnection implements MessageComponentInterface{
     }
 
     public function onClose(ConnectionInterface $conn){
-        $this->clients->detach($conn);
         $this->messageclients->detach($conn);
     }
 

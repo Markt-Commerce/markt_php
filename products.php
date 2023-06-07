@@ -121,7 +121,8 @@ class Product{
         $this->product_images = new ProductImages();
         if(is_string($product_id)){
             $product = $this->product_database->get_product($product_id);
-            $this->create_product_from_array($product);
+            if(is_array($product))
+                $this->create_product_from_array($product);
         }
         elseif(is_null($product_id)){
             $this->product_id = $this->create_product_id();

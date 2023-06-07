@@ -68,7 +68,7 @@ class orderDB{
     public function get_orders_through_seller($seller_id){
         $seller_id = mysqli_real_escape_string($this->conn,$seller_id);
         $order_query = mysqli_query($this->conn, "SELECT * FROM orders WHERE seller_id = '{$seller_id}'");
-        return mysqli_fetch_all($order_query);
+        return mysqli_fetch_all($order_query,MYSQLI_ASSOC);
     }
 
     /** 
@@ -81,7 +81,7 @@ class orderDB{
         $seller_id = mysqli_real_escape_string($this->conn,$seller_id);
         $order_query = mysqli_query($this->conn, "SELECT * FROM orders WHERE seller_id = '{$seller_id}'
                                                         AND accepted = 0");
-        return mysqli_fetch_all($order_query);
+        return mysqli_fetch_all($order_query,MYSQLI_ASSOC);
     }
 
     /** 
@@ -106,7 +106,7 @@ class orderDB{
     public function get_orders_through_buyer($buyer_id){
         $buyer_id = mysqli_real_escape_string($this->conn,$buyer_id);
         $order_query = mysqli_query($this->conn, "SELECT * FROM orders WHERE buyer_id = '{$buyer_id}'");
-        return mysqli_fetch_all($order_query);
+        return mysqli_fetch_all($order_query,MYSQLI_ASSOC);
     }
 
     /** 
@@ -118,7 +118,7 @@ class orderDB{
     public function get_orders_through_delivery($delivery_id){
         $delivery_id = mysqli_real_escape_string($this->conn,$delivery_id);
         $order_query = mysqli_query($this->conn, "SELECT * FROM orders WHERE delivery_id = '{$delivery_id}'");
-        return mysqli_fetch_all($order_query);
+        return mysqli_fetch_all($order_query,MYSQLI_ASSOC);
     }
 
     /** 
@@ -137,7 +137,7 @@ class orderDB{
     */
     public function get_all_orders(){
         $order_query = mysqli_query($this->conn, "SELECT * FROM orders WHERE 1");
-        return mysqli_fetch_all($order_query);
+        return mysqli_fetch_all($order_query,MYSQLI_ASSOC);
     }
 
     /**
@@ -147,7 +147,7 @@ class orderDB{
     public function get_accepted_orders(){
         //TODO: do a unit test here
         $order_query = mysqli_query($this->conn, "SELECT * FROM orders WHERE accepted = 1");
-        return mysqli_fetch_all($order_query);
+        return mysqli_fetch_all($order_query,MYSQLI_ASSOC);
     }
 
     /**
@@ -173,7 +173,7 @@ class orderDB{
      */
     public function get_rangom_orders_in_packets($packet_number){
         $order_query = mysqli_query($this->conn, "SELECT * FROM orders WHERE 1");
-        $all_orders = mysqli_fetch_all($order_query);
+        $all_orders = mysqli_fetch_all($order_query,MYSQLI_ASSOC);
         $number_of_data = mysqli_num_rows($order_query);
         $randomized_orders = array();
         if($number_of_data <= $packet_number){

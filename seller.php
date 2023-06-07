@@ -224,22 +224,24 @@ class Seller{
     }
 
     /**
-     * Summary of initialize_from_db
+     * gets a seller from the database and initializes the class with the gotten information
      * @param string $seller_id
      * @return void
      */
     private function initialize_from_db($seller_id){
         $seller_data = $this->get_seller_using_id($seller_id);
-        $this->unique_id = $seller_data["unique_id"];
-        $this->seller_products = $this->get_seller_products(); 
-        $this->total_raters = $seller_data["total_raters"];
-        $this->total_rating = $seller_data["total_rating"];
-        $this->initialize_from_array($seller_data);
-        $this->seller_rating = $this->calculate_rating($this->total_rating,$this->total_raters);
+        if(is_array($seller_data)){
+            $this->unique_id = $seller_data["unique_id"];
+            $this->seller_products = $this->get_seller_products(); 
+            $this->total_raters = $seller_data["total_raters"];
+            $this->total_rating = $seller_data["total_rating"];
+            $this->initialize_from_array($seller_data);
+            $this->seller_rating = $this->calculate_rating($this->total_rating,$this->total_raters);
+        }
     }
 
     /**
-     * Summary of initialize_from_array
+     * initializes the class from an array containing the seller details
      * @param array $seller_array_data
      * @return void
      */
@@ -303,7 +305,8 @@ class Seller{
 
 
     /**
-     * Summary of create_new_seller
+     * creates a new seller
+     * should be called after all public properties of this class instance has been set
      * @return bool
      */
     public function create_new_seller(){
@@ -351,7 +354,7 @@ class Seller{
     }
 
     /**
-     * Summary of already_in_database
+     * checks if a seller is already in the database
      * @param mixed $component
      * @return bool
      */

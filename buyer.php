@@ -218,8 +218,10 @@ class buyer{
      */
     private function initialize_from_db($buyer_id){
         $buyer_data = $this->get_buyer_using_id($buyer_id);
-        $this->unique_id = $buyer_data["unique_id"];
-        $this->initialize_from_array($buyer_data);
+        if(is_array($buyer_data)){
+            $this->unique_id = $buyer_data["unique_id"];
+            $this->initialize_from_array($buyer_data);
+        }
     }
 
     /**
@@ -285,6 +287,7 @@ class buyer{
 
     /**
      * creates a new buyer and stores the buyer in the database
+     * should be called after all public properties of this class instance has been set
      * @return bool
      */
     public function create_new_buyer(){
@@ -296,7 +299,7 @@ class buyer{
     }
 
     /**
-     * Summary of save_payment_details
+     * saves buyer payment details to the database
      * @param mixed $PaymentDetails
      * @return bool
      */
@@ -465,7 +468,6 @@ class buyer{
      * @return bool
      */
     public function add_to_cart($item){
-        //TODO: THIS CODE NEEDS TESTING 
         if(is_string($item)){
             $item_exists = $this->buyer_cart_connect->item_already_exists($this->unique_id,$item);
             if($item_exists){
