@@ -12,12 +12,12 @@ use Markt\buyer;
 use Markt\Seller;
 use Markt\Product;
 
-$perfect_id = !empty($_COOKIE["user_id"]) && is_string($_COOKIE["user_id"]);
+$perfect_id = !empty($_GET["user_id"]) && is_string($_GET["user_id"]);
 
-$perfect_user_type = !empty($_COOKIE["user_type"]) && is_string($_COOKIE["user_type"]);
+$perfect_user_type = !empty($_GET["user_type"]) && is_string($_GET["user_type"]);
 
-if(isset($_POST) && $perfect_id && $perfect_user_type){
-    $buyer = new buyer($_COOKIE["user_id"]);
+if(isset($_GET) && $perfect_id && $perfect_user_type){
+    $buyer = new buyer($_GET["user_id"]);
     if(count($buyer->favorites) > 0){
         $favorites = array();
         for($i = 0;$i < count($buyer->favorites);$i++){

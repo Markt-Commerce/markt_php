@@ -303,6 +303,30 @@ class Seller{
         return $this->seller_data;
     }
 
+    /**
+     * returns an array containing details about the buyer.Gives an overview of this buyer instance's 
+     * properties as an associative array
+     * @return array
+     */
+    public function overview_summ(){
+        $seller_data = array();
+        $seller_data["shopname"] = $this->shopname;
+        $seller_data["email"] = $this->email;
+        $seller_data["phone_number"] = $this->phone_number;
+        $seller_data["description"] = $this->description;
+        $seller_data["category"] = $this->category;
+        $seller_data["rating"] = $this->seller_rating;
+        $seller_data["directions"] = $this->directions;
+        $seller_data["profile_image"] = $this->profile_image;
+        $seller_data["house_number"] = $this->house_number;
+        $seller_data["street"] = $this->street;
+        $seller_data["city"] = $this->city;
+        $seller_data["state"] = $this->state;
+        $seller_data["country"] = $this->country;
+        $seller_data["postal_code"] = $this->postal_code;
+        return $seller_data;
+    }
+
 
     /**
      * creates a new seller
@@ -438,9 +462,9 @@ class Seller{
 
     /**
      * updates a seller detail in the database
-     * @param mixed $column
+     * @param string $column
      * @param mixed $value
-     * @param mixed $seller_id
+     * @param string|null $seller_id
      * @return bool
      */
     public function update_seller_detail($column,$value,$seller_id = null){

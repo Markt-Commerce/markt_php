@@ -146,7 +146,7 @@ class orderDB{
      */
     public function get_accepted_orders(){
         //TODO: do a unit test here
-        $order_query = mysqli_query($this->conn, "SELECT * FROM orders WHERE accepted = 1");
+        $order_query = mysqli_query($this->conn, "SELECT * FROM orders WHERE accepted = '1'");
         return mysqli_fetch_all($order_query,MYSQLI_ASSOC);
     }
 
@@ -156,7 +156,7 @@ class orderDB{
      * @return array
      */
     public function get_accepted_orders_in_packets($packet_number){
-        $order_query = mysqli_query($this->conn, "SELECT * FROM orders WHERE accepted = 1");
+        $order_query = mysqli_query($this->conn, "SELECT * FROM orders WHERE accepted = '1'");
         $accepted_orders = array();
         for($i = 0; $i < $packet_number; $i++){
             $accepted_orders[$i] = mysqli_fetch_assoc($order_query);

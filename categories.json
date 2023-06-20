@@ -1,5 +1,8 @@
 [
     {
+        "name":"all"
+    },
+    {
         "name": "fashion",
         "tags":[
             {"name":"shirts",

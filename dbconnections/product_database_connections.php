@@ -128,14 +128,14 @@ class ProductDB{
     public function get_product_using_category($category){
         $category = mysqli_real_escape_string($this->conn,$category);
         $product_query = mysqli_query($this->conn,"SELECT * FROM products 
-                                        WHERE product_category = '{$category}'");
+                                        WHERE product_category LIKE '%{$category}%'");
         $result_products = mysqli_fetch_all($product_query,MYSQLI_ASSOC);
         return $result_products;
     }
 
     public function get_random_packets_of_product_using_category($category,$packet_number){
         $product_query = mysqli_query($this->conn, "SELECT * FROM products 
-                                                            WHERE product_category = '{$category}'");
+                                                            WHERE product_category LIKE '%{$category}%'");
         $all_products = mysqli_fetch_all($product_query,MYSQLI_ASSOC);
         $number_of_data = mysqli_num_rows($product_query);
         $randomized_products = array();
@@ -169,7 +169,7 @@ class ProductDB{
     public function get_products_with_name($product_name){
         $product_name = mysqli_real_escape_string($this->conn,$product_name);
         $product_query = mysqli_query($this->conn,"SELECT * FROM products 
-                                        WHERE product_name = '{$product_name}'");
+                                        WHERE product_name LIKE '%{$product_name}%'");
         $product = mysqli_fetch_all($product_query,MYSQLI_ASSOC);
         return $product;
     }
@@ -184,8 +184,8 @@ class ProductDB{
         $product_name = mysqli_real_escape_string($this->conn,$product_name);
         $category = mysqli_real_escape_string($this->conn,$category);
         $product_query = mysqli_query($this->conn,"SELECT * FROM products 
-                                        WHERE product_name = '{$product_name}'
-                                        OR product_category = '{$category}'");
+                                        WHERE product_name LIKE '%{$product_name}%'
+                                        AND product_category LIKE '%{$category}%'");
         $product = mysqli_fetch_all($product_query,MYSQLI_ASSOC);
         return $product;
     }
@@ -200,8 +200,8 @@ class ProductDB{
         $product_name = mysqli_real_escape_string($this->conn,$product_name);
         $category = mysqli_real_escape_string($this->conn,$category);
         $product_query = mysqli_query($this->conn,"SELECT * FROM products 
-                                        WHERE product_name = '{$product_name}'
-                                        OR product_category = '{$category}'");
+                                        WHERE product_name LIKE '%{$product_name}%'
+                                        AND product_category LIKE '%{$category}%'");
         return mysqli_num_rows($product_query);
     }
 
@@ -212,7 +212,7 @@ class ProductDB{
      */
     public function get_products_with_particular_size_range($size){
         $size = mysqli_real_escape_string($this->conn,$size);
-        $query = mysqli_query($this->conn,"SELECT * FROM products WHERE estimated_size = {$size}");
+        $query = mysqli_query($this->conn,"SELECT * FROM products WHERE estimated_size <= {$size}");
         $result = mysqli_fetch_all($query,MYSQLI_ASSOC);
         return $result;
     }

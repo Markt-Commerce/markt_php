@@ -19,7 +19,7 @@ class ImageHandler{
     /**
      * valid extensions
      */
-    private $allowed_extensions = array('jpg','png');
+    private $allowed_extensions = array('jpg','png','webp');
 
     /**
      * available valid mimes
@@ -34,7 +34,7 @@ class ImageHandler{
 
     /**
      * check if the extension is among the valid extensions.
-     * Valid extensions are `.jpg`, `.png`
+     * Valid extensions are `.jpg`, `.png`, `.webp`
      * @param mixed $file
      * @return bool
      */
@@ -128,9 +128,9 @@ class ImageHandler{
                     $image_name_small = $image_name."small.jpg";
                 }
             }
-            $this->compress($Image,$image_name_large,80);
-            $this->compress($Image,$image_name_medium,60);
-            $this->compress($Image,$image_name_small,40);
+            $this->compress($Image,$image_name_large,60);
+            $this->compress($Image,$image_name_medium,40);
+            $this->compress($Image,$image_name_small,20);
             return $image_name;
         }
         return "";

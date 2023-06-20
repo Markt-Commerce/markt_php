@@ -286,6 +286,26 @@ class buyer{
     }
 
     /**
+     * returns an array containing details about the buyer.Gives an overview of this buyer instance's 
+     * properties as an associative array
+     * @return array
+     */
+    public function overview_summ(){
+        $buyer_data = array();
+        $buyer_data["username"] = $this->username;
+        $buyer_data["email"] = $this->email;
+        $buyer_data["phone_number"] = $this->phone_number;
+        $buyer_data["profile_image"] = $this->profile_image;
+        $buyer_data["house_number"] = $this->house_number;
+        $buyer_data["street"] = $this->street;
+        $buyer_data["city"] = $this->city;
+        $buyer_data["state"] = $this->state;
+        $buyer_data["country"] = $this->country;
+        $buyer_data["postal_code"] = $this->postal_code;
+        return $buyer_data;
+    }
+
+    /**
      * creates a new buyer and stores the buyer in the database
      * should be called after all public properties of this class instance has been set
      * @return bool
@@ -445,7 +465,7 @@ class buyer{
             $this->favorites[count($this->favorites)] = $Favorite;
             return $this->buyer_favorites_connect->add_favorite($Favorite);
         }
-        return false;
+        return false; 
     }
 
     /**

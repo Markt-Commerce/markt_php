@@ -285,6 +285,29 @@ class delivery{
     }
 
     /**
+     * returns an array containing details about the delivery.Gives an overview of this delivery instance's 
+     * properties as an associative array
+     * @return array
+     */
+    public function overview_summ(){
+        $delivery_data = array();
+        $delivery_data["deliveryname"] = $this->deliveryname;
+        $delivery_data["email"] = $this->email;
+        $delivery_data["phone_number"] = $this->phone_number;
+        $delivery_data["profile_image"] = $this->profile_image;
+        $delivery_data["vehicle_type"] = $this->vehicle_type;
+        $delivery_data["working_for_org"] = $this->working_for_org;
+        $delivery_data["org_name"] = $this->org_name;
+        $delivery_data["house_number"] = $this->house_number;
+        $delivery_data["street"] = $this->street;
+        $delivery_data["city"] = $this->city;
+        $delivery_data["state"] = $this->state;
+        $delivery_data["country"] = $this->country;
+        $delivery_data["postal_code"] = $this->postal_code;
+        return $delivery_data;
+    }
+
+    /**
      * creates a new delivery
      * should be called after all public properties of this class instance has been set
      * @return bool
@@ -345,7 +368,7 @@ class delivery{
     }
 
     /**
-     * checks if a buyer is already in the database
+     * checks if a delivery is already in the database
      * @param string $component
      * @return bool
      */
@@ -358,7 +381,7 @@ class delivery{
     }
 
     /**
-     * initializes the instance of the class using the buyer login details.
+     * initializes the instance of the class using the delivery login details.
      * Checks if there is an available login, if there is, it compares the password.
      * If both requirements are met, password is correct and email/deliveryname/phonenumber exists, 
      * the class is initialized.
@@ -372,7 +395,7 @@ class delivery{
             if(password_verify($delivery_login["password"],$user["password"])){
                 $this->unique_id = $user["unique_id"];
                 $this->initialize_from_array($user);
-                return true;
+                return true; 
             }
         }
         else{
@@ -409,18 +432,43 @@ class delivery{
      public function get_delivery_orders(){
         $order_locations = [];
         $orders = [];
-        $proximity = 1.0;
-        while(count($order_locations) < 8){
-            $order_locations = $this->delivery_orders_locations_connect->get_close_order_locations(
-                                                                $this->longtitude,
-                                                                $this->latitude,
-                                                                $proximity);
-                $proximity += 5.0; 
-        }
+        $proximity = 200.0;
+        $order_locations = $this->delivery_orders_locations_connect->get_close_order_locations(
+                                                            $this->longtitude,
+                                                            $this->latitude,
+                                                            $proximity);
         for($i = 0; $i < count($order_locations); $i++){
             $orders[$i] = $this->delivery_orders_connect->get_order($order_locations[$i]["order_id"]);
         }
-        return $orders;
+        return $this->filter_already_handled_deliveries($orders);
+    }
+
+    /**
+     * removes orders that already have deliveries assigned or orders that a delivery account is
+     * currently handling
+     * @param array $deliveries
+     * @return array
+     */
+    private function filter_already_handled_deliveries($deliveries){
+        for($i = 0;$i < count($deliveries);$i++){
+            if(!empty($deliveries[$i]["delivery_id"]) || $deliveries[$i]["accepted"] == 0){
+                unset($deliveries[$i]);
+            }
+        }
+        $filtered_orders = array_values($deliveries);
+        return $filtered_orders;
+    }
+
+    /**
+     * gets all deliveries that a delivery account is yet to attend to. A delivery order is unattended to
+     * if it is not yet delivered or collected from a seller
+     * @param mixed $delivery_id
+     * @return array
+     */
+    public function get_pending_deliveries($delivery_id = null){
+        if(is_null($delivery_id))
+            return $this->delivery_orders_connect->get_all_orders_with_assigned_delivery($this->unique_id);
+        return $this->delivery_orders_connect->get_all_orders_with_assigned_delivery($delivery_id);
     }
 
     /**

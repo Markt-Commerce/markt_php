@@ -14,6 +14,7 @@ use Markt\Seller;
 
 if(isset($_POST) && !empty($_POST["user_type"])){
     $user_login = array();
+    $result = array();
     if($_POST["user_type"] == "buyer"){
         $user_login["usernameoremailorphonenumber"] = $_POST["usernameoremailorphonenumber"];
         $user_login["password"] = $_POST["password"];
@@ -21,13 +22,17 @@ if(isset($_POST) && !empty($_POST["user_type"])){
         if($buyer->loggedin){
             $_SESSION["user_id"] = $buyer->get_buyer_id();
             $_SESSION["user_type"] = "buyer";
-            setcookie("user_id",$buyer->get_buyer_id(),60*60*2,"","",null,true);
-            setcookie("user_type","buyer",60*60*2,"/","",null,true);
+            $result["user"] = $buyer->username;
+            $result["user_id"] = $buyer->get_buyer_id();
+            $result["message"] = "ok";
+            //setcookie("user_id",$buyer->get_buyer_id(),60*60*2,"","",null,true);
+            //setcookie("user_type","buyer",60*60*2,"/","",null,true);
             session_start();
-            echo "ok";
+            echo json_encode($result);
         }
-        else{
-            echo "bad credentials";
+        else{ 
+            $result["message"] = "bad credentials";
+            echo json_encode($result);
         }
     }
     elseif($_POST["user_type"] == "seller"){
@@ -37,13 +42,17 @@ if(isset($_POST) && !empty($_POST["user_type"])){
         if($seller->loggedin){
             $_SESSION["user_id"] = $seller->get_seller_id();
             $_SESSION["user_type"] = "seller";
-            setcookie("user_id",$seller->get_seller_id(),60*60*2,"","",null,true);
-            setcookie("user_type","seller",60*60*2,"/","",null,true);
+            $result["user"] = $seller->shopname;
+            $result["user_id"] = $seller->get_seller_id();
+            $result["message"] = "ok";
+            //setcookie("user_id",$seller->get_seller_id(),60*60*2,"","",null,true);
+            //setcookie("user_type","seller",60*60*2,"/","",null,true);
             session_start();
-            echo "ok";
+            echo json_encode($result);
         }
         else{
-            echo "bad credentials";
+            $result["message"] = "bad credentials";
+            echo json_encode($result);
         }
     }
     elseif($_POST["user_type"] == "delivery"){
@@ -53,14 +62,17 @@ if(isset($_POST) && !empty($_POST["user_type"])){
         if($delivery->loggedin){
             $_SESSION["user_id"] = $delivery->get_delivery_id();
             $_SESSION["user_type"] = "delivery";
-            setcookie("user_id",$delivery->get_delivery_id(),60*60*2,"","",null,true);
-            setcookie("user_type","delivery",60*60*2,"/","",null,true);
+            $result["user"] = $delivery->deliveryname;
+            $result["user_id"] = $delivery->get_delivery_id();
+            $result["message"] = "ok";
+            //setcookie("user_id",$delivery->get_delivery_id(),60*60*2,"","",null,true);
+            //setcookie("user_type","delivery",60*60*2,"/","",null,true);
             session_start();
-            echo json_encode($_COOKIE["user_id"]);
-            echo "ok";
+            echo json_encode($result);
         }
         else{
-            echo "bad credentials";
+            $result["message"] = "bad credentials";
+            echo json_encode($result);
         }
     } 
 }

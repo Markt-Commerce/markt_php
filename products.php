@@ -159,6 +159,27 @@ class Product{
     }
 
     /**
+     * returns an array containing details about the product.Gives an overview of this product instance's 
+     * properties as an associative array
+     * @return array
+     */
+    public function overview_summ(){
+        $product = array();
+        $product["desc_under"] = $this->desc_under;
+        $product["product_description"] = $this->product_description;
+        $product["product_category"] = $this->product_category;
+        $product["tags"] = $this->tags;
+        $product["product_id"] = $this->product_id;
+        $product["product_name"] = $this->product_name;
+        $product["product_price"] = $this->product_price;
+        $product["product_quantity"] = $this->product_quantity;
+        $product["estimated_size"] = $this->estimated_size;
+        $product["product_type"] = $this->product_type;
+        $product["seller_id"] = $this->seller_id;
+        return $product;
+    }
+
+    /**
      * deletes a product and its images from the server and database.
      * @param string $product_id The id of the product. If specified, the function would 
      * delete images and the product related to the product_id specified, if it is not specified,

@@ -9,7 +9,6 @@ require_once "products.php";
 use Markt\Product;
 
 $product = new Product();
-$product_image_position_flag = 0;
 
 /**
  * Format of $_POST:
@@ -21,24 +20,20 @@ $product_image_position_flag = 0;
  * ]
  */
 if(isset($_POST) && isset($_POST["seller_id"])){
-    for($i = 0 ;$i < count($_POST["products"]);$i++){
-        $product_image = array();
-        $product->desc_under = $_POST["products"][$i]["desc_under"];
-        $product->estimated_size = $_POST["products"][$i]["estimated_size"];
-        $product->product_category = $_POST["products"][$i]["product_category"];
-        $product->product_description = $_POST["products"][$i]["product_description"];
-        $product->product_name = $_POST["products"][$i]["product_name"];
-        $product->product_price = $_POST["products"][$i]["product_price"];
-        $product->product_quantity = $_POST["products"][$i]["product_quantity"];
-        $product->product_type = $_POST["products"][$i]["product_type"];
-        $product->seller_id = $_POST["seller_id"];
-        for($j = $product_image_position_flag;$j < $product_image_position_flag + $_POST["products"][$i]["arrsize"]; $j++){
-            $product_image[count($product_image)] = $_FILES[$j];
-        }
-        $product_image_position_flag += $_POST["products"][$i]["arrsize"];
-        $product->create_product_images($product_image);
-    }
-    echo $product->create_product();
+    $product_image = array();
+    $product->desc_under = $_POST["desc_under"];
+    $product->estimated_size = $_POST["estimated_size"];
+    $product->product_category = $_POST["product_category"];
+    $product->product_description = $_POST["product_description"];
+    $product->product_name = $_POST["product_name"];
+    $product->product_price = $_POST["product_price"];
+    $product->product_quantity = $_POST["product_quantity"];
+    $product->product_type = $_POST["product_type"];
+    $product->seller_id = $_POST["seller_id"];
+    $product->this_products_images = $_FILES;
+    $product->add_tags(json_decode($_POST["tags"],true));
+    echo json_encode($product->create_product());
 }
+
 
 ?>

@@ -10,11 +10,11 @@ require "order.php";
 use Markt\orders\order;
 use Markt\Seller;
 
-if(isset($_POST) && isset($_COOKIE["user_type"]) && isset($_COOKIE["user_id"])){
-    $seller = new Seller($_COOKIE["user_id"]);
+if(isset($_GET) && isset($_GET["user_type"]) && isset($_GET["user_id"])){
+    $seller = new Seller($_GET["user_id"]);
     $order = new order();
-    $order->seller_id = $_COOKIE["user_id"];
-    echo json_encode($order->get_seller_accepted_orders($_COOKIE["user_id"]));
+    $order->seller_id = $_GET["user_id"];
+    echo json_encode($order->get_seller_accepted_orders($_GET["user_id"]));
 }
 
 ?>
