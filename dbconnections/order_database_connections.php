@@ -80,7 +80,7 @@ class orderDB{
     public function get_accepted_orders_through_seller($seller_id){
         $seller_id = mysqli_real_escape_string($this->conn,$seller_id);
         $order_query = mysqli_query($this->conn, "SELECT * FROM orders WHERE seller_id = '{$seller_id}'
-                                                        AND accepted = 0");
+                                                        AND accepted = 1");
         return mysqli_fetch_all($order_query,MYSQLI_ASSOC);
     }
 

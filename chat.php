@@ -77,7 +77,8 @@ class Chat{
      * user's id. returns undefined if the user id is undefined 
      * set the user id using by creating a new instance of Chat 
      * and setting `new_instace_of_class->sent_from` to the id of 
-     * the user
+     * the user. Gets all messages sent from and to the user using 
+     * `new_instace_of_class->sent_from`
      * @return array|void
      */
     public function get_chat(){
@@ -97,24 +98,37 @@ class Chat{
         $arranged_chats = array();
         for($i = 0; $i < count($chat_bundle); $i++){
             $chat = $chat_bundle[$i];
+            $added = false;
             if ($chat["sent_from"] == $this->sent_from) {
-                if (array_key_exists($chat["sent_to"],$arranged_chats)) {
-                    $arranged_chats[$chat["sent_to"]][count($arranged_chats[$chat["sent_to"]])] = $chat;
+                for ($j=0; $j < count($arranged_chats); $j++) { 
+                    if ($chat["sent_to"] == $arranged_chats[$j]["user_id"]) {
+                        array_push($arranged_chats[$j]["messages"],$chat);
+                        $added = true;
+                        break;
+                    }
                 }
-                else{
-                    $arranged_chats[$chat["sent_to"]] = array();
-                    $arranged_chats[$chat["sent_to"]][count($arranged_chats[$chat["sent_to"]])] = $chat;
+                if(!$added){
+                    $new_chat = array();
+                    $new_chat["user_id"] = $chat["sent_to"];
+                    $new_chat["messages"] = array();
+                    array_push($new_chat["messages"],$chat);
+                    array_push($arranged_chats,$new_chat);
                 }
             }
-            else{
-                if ($chat["sent_to"] == $this->sent_from) {
-                    if (array_key_exists($chat["sent_from"],$arranged_chats)) {
-                        $arranged_chats[$chat["sent_from"]][count($arranged_chats[$chat["sent_to"]])] = $chat;
+            elseif ($chat["sent_to"] == $this->sent_from) {
+                for ($j=0; $j < count($arranged_chats); $j++) { 
+                    if ($chat["sent_from"] == $arranged_chats[$j]["user_id"]) {
+                        array_push($arranged_chats[$j]["messages"],$chat);
+                        $added = true;
+                        break;
                     }
-                    else{
-                        $arranged_chats[$chat["sent_from"]] = array();
-                        $arranged_chats[$chat["sent_from"]][count($arranged_chats[$chat["sent_to"]])] = $chat;
-                    }
+                }
+                if(!$added){
+                    $new_chat = array();
+                    $new_chat["user_id"] = $chat["sent_from"];
+                    $new_chat["messages"] = array();
+                    array_push($new_chat["messages"],$chat);
+                    array_push($arranged_chats,$new_chat);
                 }
             }
         }

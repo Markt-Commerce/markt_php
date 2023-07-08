@@ -67,7 +67,7 @@ class Comment{
     public function __construct(){
         $this->comment_database = new commentDB();
         $this->comment_id = uniqid("comment-",true);
-        $this->comment_date = date("d-m-Y h:i:s");
+        $this->comment_date = date("Y-m-d");
     }
 
     /**
@@ -76,7 +76,7 @@ class Comment{
      */
     public function create_comment(){
         if(!empty($this->comment_body) && !empty($this->comment_place) && !empty($this->comment_place_id) 
-        && !empty($this->comment_title) && !empty($this->commenter) ){
+        && !empty($this->commenter) ){
             $new_comment = array();
             $new_comment["comment_body"] = $this->comment_body;
             $new_comment["comment_date"] = $this->comment_date;
@@ -87,7 +87,7 @@ class Comment{
             $new_comment["commenter"] =  $this->commenter;
             return $this->comment_database->create_comment($new_comment);
         }
-        return false;
+        return false; 
     }
 
     /**

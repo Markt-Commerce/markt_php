@@ -25,8 +25,9 @@ if(isset($_POST) && !empty($_POST["user_type"])){
             $result["user"] = $buyer->username;
             $result["user_id"] = $buyer->get_buyer_id();
             $result["message"] = "ok";
-            //setcookie("user_id",$buyer->get_buyer_id(),60*60*2,"","",null,true);
-            //setcookie("user_type","buyer",60*60*2,"/","",null,true);
+            $result["profile_image"] = (empty($buyer->profile_image)) ? "profile-placeholder-image" : $buyer->profile_image;
+            setcookie("user_id",$buyer->get_buyer_id(),time()+60*60*2,"","",null,true);
+            setcookie("user_type","buyer",time()+60*60*2,"/","",null,true);
             session_start();
             echo json_encode($result);
         }
@@ -45,8 +46,9 @@ if(isset($_POST) && !empty($_POST["user_type"])){
             $result["user"] = $seller->shopname;
             $result["user_id"] = $seller->get_seller_id();
             $result["message"] = "ok";
-            //setcookie("user_id",$seller->get_seller_id(),60*60*2,"","",null,true);
-            //setcookie("user_type","seller",60*60*2,"/","",null,true);
+            $result["profile_image"] = (empty($seller->profile_image)) ? "profile-placeholder-image" : $seller->profile_image;
+            setcookie("user_id",$seller->get_seller_id(),time()+60*60*2,"","",null,true);
+            setcookie("user_type","seller",time()+60*60*2,"/","",null,true);
             session_start();
             echo json_encode($result);
         }
@@ -65,8 +67,9 @@ if(isset($_POST) && !empty($_POST["user_type"])){
             $result["user"] = $delivery->deliveryname;
             $result["user_id"] = $delivery->get_delivery_id();
             $result["message"] = "ok";
-            //setcookie("user_id",$delivery->get_delivery_id(),60*60*2,"","",null,true);
-            //setcookie("user_type","delivery",60*60*2,"/","",null,true);
+            $result["profile_image"] = (empty($delivery->profile_image)) ? "profile-placeholder-image" : $delivery->profile_image;
+            setcookie("user_id",$delivery->get_delivery_id(),time()+60*60*2,"","",null,true);
+            setcookie("user_type","delivery",time()+60*60*2,"/","",null,true);
             session_start();
             echo json_encode($result);
         }

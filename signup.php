@@ -20,7 +20,7 @@ if(isset($_POST)){
     if($_POST["user_type"] == "buyer" || !empty($_POST["username"])){
         if(!empty($_POST["email"]) && !empty($_POST["password"]) && !empty($_POST["phone_number"])){
             $buyer->username = $_POST["username"];
-            $buyer->buyer_payment_data_array = json_decode($_POST["payment_details"],true);
+            array_push($buyer->buyer_payment_data_array,json_decode($_POST["payment_details"],true));
             $buyer->city = $_POST["city"];
             $buyer->street = $_POST["street"];
             $buyer->country = $_POST["country"];
@@ -36,14 +36,15 @@ if(isset($_POST)){
             if($buyer->create_new_buyer()){
                 $_SESSION["user_id"] = $buyer->get_buyer_id();
                 $_SESSION["user_type"] = "buyer";
-                //setcookie("user_id",$buyer->get_buyer_id(),60*60*2,"","",null,true);
-                //setcookie("user_type","buyer",60*60*2,"/","",null,true);
+                setcookie("user_id",$buyer->get_buyer_id(),time()+60*60*2,"","",null,true);
+                setcookie("user_type","buyer",time()+60*60*2,"/","",null,true);
                 session_start();
                 $result_data = array();
                 $result_data["saved"] = true;
                 $result_data["user_id"] = $buyer->get_buyer_id();
                 $result_data["username"] = $buyer->username;
                 $result_data["user_type"] = "buyer";
+                $result_data["profile_image"] = (empty($buyer->profile_image)) ? "placeholder-image" : $buyer->profile_image;
                 echo json_encode($result_data); 
             }
             else{
@@ -56,7 +57,7 @@ if(isset($_POST)){
     }
     elseif($_POST["user_type"] == "seller" || !empty($_POST["shopname"])){
         if(!empty($_POST["email"]) && !empty($_POST["password"]) && !empty($_POST["phone_number"])){
-            $seller->seller_payment_data_array = json_decode($_POST["payment_details"],true);
+            array_push($seller->seller_payment_data_array,json_decode($_POST["payment_details"],true));
             $seller->category = $_POST["category"];
             $seller->city = $_POST["city"];
             $seller->country = $_POST["country"];
@@ -76,15 +77,16 @@ if(isset($_POST)){
             if($seller->create_new_seller()){
                 $_SESSION["user_id"] = $seller->get_seller_id();
                 $_SESSION["user_type"] = "seller";
-                //setcookie("user_id",$seller->get_seller_id(),60*60*2,"","",null,true);
-                //setcookie("user_type","seller",60*60*2,"/","",null,true);
+                setcookie("user_id",$seller->get_seller_id(),time()+60*60*2,"","",null,true);
+                setcookie("user_type","seller",time()+60*60*2,"/","",null,true);
                 session_start();
                 $result_data = array();
                 $result_data["saved"] = true;
                 $result_data["user_id"] = $seller->get_seller_id();
                 $result_data["username"] = $seller->shopname;
                 $result_data["user_type"] = "seller";
-                echo json_encode($result_data); 
+                $result_data["profile_image"] = (empty($seller->profile_image)) ? "profile-placeholder-image" : $seller->profile_image;
+                echo json_encode($result_data);
             }
             else{
                 echo json_encode("cannot create new seller");
@@ -96,7 +98,7 @@ if(isset($_POST)){
     }
     elseif($_POST["user_type"] == "delivery" || !empty($_POST["deliveryname"])){
         if(!empty($_POST["email"]) && !empty($_POST["password"]) && !empty($_POST["phone_number"])){
-            $delivery->delivery_payment_data_array = json_decode($_POST["payment_details"],true);
+            array_push($delivery->delivery_payment_data_array,json_decode($_POST["payment_details"],true));
             $delivery->city = $_POST["city"];
             $delivery->country = $_POST["country"];
             $delivery->deliveryname = $_POST["deliveryname"];
@@ -116,14 +118,15 @@ if(isset($_POST)){
             if($delivery->create_new_delivery()){
                 $_SESSION["user_id"] = $delivery->get_delivery_id();
                 $_SESSION["user_type"] = "delivery";
-                //setcookie("user_id",$delivery->get_delivery_id(),60*60*2,"","",null,true);
-                //setcookie("user_type","delivery",60*60*2,"/","",null,true);
+                setcookie("user_id",$delivery->get_delivery_id(),time()+60*60*2,"","",null,true);
+                setcookie("user_type","delivery",time()+60*60*2,"/","",null,true);
                 session_start();
                 $result_data = array();
                 $result_data["saved"] = true;
                 $result_data["user_id"] = $delivery->get_delivery_id();
                 $result_data["username"] = $delivery->deliveryname;
                 $result_data["user_type"] = "delivery";
+                $result_data["profile_image"] = (empty($delivery->profile_image)) ? "placeholder-image" : $delivery->profile_image;
                 echo json_encode($result_data); 
             }
             else{
@@ -133,7 +136,10 @@ if(isset($_POST)){
         else{
             echo json_encode("email,phone_no or password not provided");
         }
-    } 
+    }
+    else{
+        echo json_encode("user type not provided");
+    }
 
 }else{
     echo json_encode("not set POST");

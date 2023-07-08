@@ -3,11 +3,9 @@
 namespace Markt;
 
 include_once "dbconnections/product_images_database_connections.php";
-include_once "dbconnections/user_database_connections.php";
 include_once "definitions.php";
 
 use Markt\DB\ProductImages;
-use Markt\DB\MarktDB;
 
 /**
  * Class for handling Images sent to the server and Images 
@@ -188,7 +186,7 @@ class ImageHandler{
     /**
      * deletes chat_image from the database and the filesystem
      * returns `true` if successful and `false` if unsuccessful
-     * @param mixed $image_id
+     * @param string $image_id
      * @return bool
      */
     public function delete_chat_image($image_id){
@@ -198,7 +196,7 @@ class ImageHandler{
     /**
      * deletes image from the database and the filesystem
      * returns `true` if successful and `false` if unsuccessful
-     * @param mixed $image_id
+     * @param string $image_id
      * @return bool
      */
     public function delete_product_image($image_id){
@@ -209,26 +207,18 @@ class ImageHandler{
     /**
      * deletes user profile images from the database.
      * returns true if successful and false if unsuccessful
-     * @param mixed $user_id
+     * @param string $image_name
      * @return bool
      */
-    public function delete_user_image($user_id,$type){
-        $userdb = new MarktDB();
-        switch($type){
-            case "buyer":
-                $user = $userdb->get_Buyer($user_id,"specific");
-                unlink(UPLOAD_DIRECTORY.$user["profile_image"]);
-                return $userdb->edit_buyer_data($user_id,"profile_image","");
-            case "seller":
-                $user = $userdb->get_Seller($user_id,"specific");
-                unlink(UPLOAD_DIRECTORY.$user["profile_image"]);
-                return $userdb->edit_seller_data($user_id,"profile_image","");
-            case "delivery":
-                $user = $userdb->get_Delivery($user_id,"specific");
-                unlink(UPLOAD_DIRECTORY.$user["profile_image"]);
-                return $userdb->edit_delivery_data($user_id,"profile_image","");
-            default:
-                return false;
+    public function delete_user_image($image_name){
+        if(!empty($image_name)){
+            $large_deleted = unlink(UPLOAD_DIRECTORY.$image_name."large");
+            $medium_deleted = unlink(UPLOAD_DIRECTORY.$image_name."medium");
+            $small_deleted = unlink(UPLOAD_DIRECTORY.$image_name."small");
+            return $large_deleted && $medium_deleted && $small_deleted;
+        }
+        else{
+            return false;
         }
     }
 

@@ -5,3 +5,5 @@
 dbconnections/password%forgotten%users%and%codes.json
 testlogin.html
 testwebsocket.html
+test-sess.html
+test-sess.php

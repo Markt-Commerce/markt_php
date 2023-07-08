@@ -534,6 +534,18 @@ class Seller{
         $this->profile_image = $this->profile_image_handler->upload_image($image);
     }
 
+     /**
+     * Updates the profile image of the seller
+     * @param mixed $image
+     * @return bool
+     */
+    public function update_seller_profile_image($image){
+        $deleted_old_profile_image = $this->profile_image_handler->delete_user_image($this->profile_image);
+        $this->profile_image = $this->profile_image_handler->upload_image($image);
+        $set_new_profile_image  = $this->update_seller_detail("profile_image",$this->profile_image);
+        return $deleted_old_profile_image && $set_new_profile_image;
+    }
+
     /**
      * gets all the products a seller sells
      * @return array

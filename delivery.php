@@ -480,8 +480,20 @@ class delivery{
         $this->profile_image = $this->profile_image_handler->upload_image($image);
     }
 
+     /**
+     * Updates the profile image of the delivery
+     * @param mixed $image
+     * @return bool
+     */
+    public function update_delivery_profile_image($image){
+        $deleted_old_profile_image = $this->profile_image_handler->delete_user_image($this->profile_image);
+        $this->profile_image = $this->profile_image_handler->upload_image($image);
+        $set_new_profile_image  = $this->update_delivery_detail("profile_image",$this->profile_image);
+        return $deleted_old_profile_image && $set_new_profile_image;
+    }
+
     /**
-     * Changes the buyer password using the user email
+     * Changes the delivery password using the user email
      * @param string $email
      * @param string $password
      * @return bool

@@ -12,12 +12,11 @@ require_once 'buyer.php';
 require_once 'delivery.php';
 
 use PHPMailer\PHPMailer\PHPMailer; 
-use PHPMailer\PHPMailer\Exception;
 use Markt\buyer;
 use Markt\delivery;
 use Markt\Seller;
 
-/**
+/** 
  * TODO: 
  * 1. create markt temporary email (gmail), the main email would use the host provider domain name
 */
@@ -43,6 +42,7 @@ function remove_expired_codes(){
 $all_forgot_password_users = remove_expired_codes();
 
 if(isset($_POST["user_type"]) && isset($_POST["email"]) && filter_var($_POST["email"],FILTER_VALIDATE_EMAIL)){
+
 
     $in_database = false;
 
@@ -72,7 +72,8 @@ if(isset($_POST["user_type"]) && isset($_POST["email"]) && filter_var($_POST["em
         $new_password_retrieval_entry["retrieval_code"] = $randomcode;
         $new_password_retrieval_entry["expiry_time"] = time() + $time_to_expire;
 
-        $mail_text = "<div>
+        //work on this later with internet
+        /* $mail_text = "<div>
             <h2>Hey there.</h2>
             <p>we heard you forgot your password. Let's try to get you back in. Here is your verification code.</p>
             <h1 style='display:flex;justify-content:center;align-items:center'>".$randomcode."</h1>
@@ -83,6 +84,17 @@ if(isset($_POST["user_type"]) && isset($_POST["email"]) && filter_var($_POST["em
             password as some one might have gotten access to your password</p>
             <p>Do not reply this message as you will not receive any response.</p><div>";
 
+        $mail_text_non_html = "
+            Hey there.
+            we heard you forgot your password. Let's try to get you back in. Here is your verification code.
+            ".$randomcode."
+            Enter this code into the website to get back into your account and continue your 
+            transactions
+            P.S: This code expires in three minutes.
+            If you did not request for this code, please ignore this mail and change your
+            password as some one might have gotten access to your password
+            Do not reply this message as you will not receive any response.";
+
         $mail = new PHPMailer(true);                              
         $mail->isSMTP();                                     
         $mail->Host = 'smtp.gmail.com';
@@ -90,31 +102,47 @@ if(isset($_POST["user_type"]) && isset($_POST["email"]) && filter_var($_POST["em
         $mail->Username = 'sender@gmail.com';             
         $mail->Password = 'password';                         
         $mail->SMTPSecure = 'tls';  
-        $mail->Port = 587;    
+        $mail->Port = 587;
 
         $mail->From = 'from@example.com';
         $mail->FromName = 'Mailer';
         $mail->addAddress('joe@example.net', 'Joe User');    
         $mail->addAddress('ellen@example.com');               
         $mail->addReplyTo('info@example.com', 'Information');
-        //$mail->addCC('cc@example.com');
-        //$mail->addBCC('bcc@example.com');
 
         $mail->WordWrap = 50;                                 
         $mail->isHTML(true);                                  
 
-        $mail->Subject = 'Here is the subject';
-        $mail->Body    = 'This is the HTML message body <b>in bold!</b>';
-        $mail->AltBody = 'This is the body in plain text for non-HTML mail clients'; 
+        $mail->Subject = "Let's get you back in";
+        $mail->Body    = $mail_text;
+        $mail->AltBody = $mail_text_non_html;  */
 
-        if($mail->send()){
+        /* if($mail->send()){
             $all_forgot_password_users[count($all_forgot_password_users)] = $new_password_retrieval_entry;
             file_put_contents(
                                 "dbconnections/password%forgotten%users%and%codes.json",
                                 json_encode($all_forgot_password_users));
+                                echo json_encode($randomcode);
         }
         else{
             echo json_encode("could not register code");
+            echo json_encode($randomcode);
+        } */
+        $all_forgot_password_users[count($all_forgot_password_users)] = $new_password_retrieval_entry;
+            file_put_contents(
+                                "dbconnections/password%forgotten%users%and%codes.json",
+                                json_encode($all_forgot_password_users));
+                                echo json_encode($randomcode);
+    }
+    else{
+        if($_POST["user_type"] == "buyer"){
+            echo json_encode("user not in our buyer database");
+        }
+        elseif($_POST["user_type"] == "seller"){
+            echo json_encode("user not in our seller database");
+        }
+        elseif($_POST["user_type"] == "delivery"){
+            echo json_encode("user not in our delivery database");
         }
     }
 }

@@ -210,9 +210,9 @@ class order{
             $new_order["seller_id"] = $this->seller_id;
             $new_order["buyer_id"] = $this->buyer_id;
             $new_order["product_id"] = $this->product_id;
-            $new_order["receive_code"] = $this->receive_code;
-            $new_order["delivery_code"] = $this->delivery_code;
-            $new_order["order_id"] = $this->order_id;
+            $new_order["receive_code"] = $this->create_receive_code();
+            $new_order["delivery_code"] = $this->create_deliver_code();
+            $new_order["order_id"] = $this->create_order_id();
             $new_order["product_quantity"] = $this->product_quantity;
             $new_order["accepted"] = false;
             $new_order["delivered"] = false;
@@ -267,7 +267,7 @@ class order{
     public function get_seller_accepted_orders($seller_id = null){
         if(is_null($seller_id))
             return $this->order_db->get_accepted_orders_through_seller($this->seller_id);
-        return $this->order_db->get_accepted_orders_through_seller($seller_id);
+        return $this->order_db->get_accepted_orders_through_seller($seller_id); 
     }
 
     /**

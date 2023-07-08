@@ -37,7 +37,7 @@ if(isset($_GET) && isset($_GET["user_type"]) && isset($_GET["user_id"])){
         else{
             //a placeholder image needs to be created and added here incase a product does
             //not have an image
-            $displayed_order["product_image"] = "";
+            $displayed_order["product_image"] = "placeholder-image";
         }
         $buyer = new buyer($unaccepted_orders[$i]["buyer_id"]);
         $displayed_order["buyer_id"] = $buyer->get_buyer_id();

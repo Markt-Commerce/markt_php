@@ -565,6 +565,18 @@ class buyer{
     }
 
     /**
+     * Updates the profile image of the buyer
+     * @param mixed $image
+     * @return bool
+     */
+    public function update_buyer_profile_image($image){
+        $deleted_old_profile_image = $this->profile_image_handler->delete_user_image($this->profile_image);
+        $this->profile_image = $this->profile_image_handler->upload_image($image);
+        $set_new_profile_image  = $this->update_buyer_detail("profile_image",$this->profile_image);
+        return $deleted_old_profile_image && $set_new_profile_image;
+    }
+
+    /**
      * changes or updates part of a seller detail
      * @param string $column
      * @param mixed $value
