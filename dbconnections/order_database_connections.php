@@ -72,6 +72,18 @@ class orderDB{
     }
 
     /** 
+     * Gets number of orders connected to a particular seller using the 
+     * `seller_id`
+     * @param string $seller_id
+     * @return int
+    */
+    public function get_seller_order_amount($seller_id){
+        $seller_id = mysqli_real_escape_string($this->conn,$seller_id);
+        $order_query = mysqli_query($this->conn, "SELECT * FROM orders WHERE seller_id = '{$seller_id}'");
+        return mysqli_num_rows($order_query);
+    }
+
+    /** 
      * Gets orders connected to a particular seller using the 
      * `seller_id`
      * @param string $seller_id
@@ -107,6 +119,18 @@ class orderDB{
         $buyer_id = mysqli_real_escape_string($this->conn,$buyer_id);
         $order_query = mysqli_query($this->conn, "SELECT * FROM orders WHERE buyer_id = '{$buyer_id}'");
         return mysqli_fetch_all($order_query,MYSQLI_ASSOC);
+    }
+
+    /** 
+     * Gets the number of orders connected to a particular buyer using the 
+     * `buyer_id`
+     * @param string $buyer_id
+     * @return int
+    */
+    public function get_buyer_order_amount($buyer_id){
+        $buyer_id = mysqli_real_escape_string($this->conn,$buyer_id);
+        $order_query = mysqli_query($this->conn, "SELECT * FROM orders WHERE buyer_id = '{$buyer_id}'");
+        return mysqli_num_rows($order_query);
     }
 
     /** 

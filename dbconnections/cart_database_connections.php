@@ -50,13 +50,24 @@ class CartDB{
 
     /**
      * get the items in the cart of a buyer using the buyer's id
-     * @param mixed $buyer_id
+     * @param string $buyer_id
      * @return array
      */
     public function get_buyer_cart_items($buyer_id){
         $buyer_id = mysqli_real_escape_string($this->conn,$buyer_id);
         $query = mysqli_query($this->conn,"SELECT * FROM cart WHERE buyer_id = '{$buyer_id}'");
         return mysqli_fetch_all($query,MYSQLI_ASSOC);
+    }
+
+    /**
+     * get the number of items in the cart of a buyer using the buyer's id
+     * @param string $buyer_id
+     * @return int
+     */
+    public function get_number_of_buyer_cart_items($buyer_id){
+        $buyer_id = mysqli_real_escape_string($this->conn,$buyer_id);
+        $query = mysqli_query($this->conn,"SELECT * FROM cart WHERE buyer_id = '{$buyer_id}'");
+        return mysqli_num_rows($query);
     }
 
     /**

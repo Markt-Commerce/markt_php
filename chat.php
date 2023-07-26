@@ -66,9 +66,7 @@ class Chat{
             $this->message = $Chatdata["message"];
             $this->sent_from = $Chatdata["sent_from"];
             $this->attached_file = $Chatdata["attached_file"];
-            if (!is_null($this->message) && !empty($this->message) && isset($this->message)) {
-                $this->attached_file = "";
-            }
+            /*  */
         }
     }
 

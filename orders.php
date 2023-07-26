@@ -306,6 +306,17 @@ class order{
     }
 
     /**
+     * gets the number of unattended orders connected to a seller
+     * @param mixed $seller_id
+     * @return int
+     */
+    public function get_seller_unattended_order_amount($seller_id = null){
+        if(is_null($seller_id))
+            return $this->order_db->get_seller_order_amount($this->seller_id);
+        return $this->order_db->get_seller_order_amount($seller_id);
+    }
+
+    /**
      * Get all orders related to a buyer
      * @param string $buyer_id
      * @return array
@@ -314,6 +325,17 @@ class order{
         if(is_null($buyer_id))
             return $this->order_db->get_orders_through_buyer($this->buyer_id);
         return $this->order_db->get_orders_through_buyer($buyer_id);
+    }
+
+    /**
+     * Get the number of orders related to a buyer
+     * @param string $buyer_id
+     * @return int
+     */
+    public function get_buyer_orders_amount($buyer_id = null){
+        if(is_null($buyer_id))
+            return $this->order_db->get_buyer_order_amount($this->buyer_id);
+        return $this->order_db->get_buyer_order_amount($buyer_id);
     }
 
     /**

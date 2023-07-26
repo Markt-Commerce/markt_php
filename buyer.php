@@ -543,6 +543,14 @@ class buyer{
     }
 
     /**
+     * get the number of items in the buyer cart
+     * @return integer
+     */
+    public function get_cart_item_number(){
+        return $this->buyer_cart_connect->get_number_of_buyer_cart_items($this->unique_id);
+    }
+
+    /**
      * removes an item from the cart
      * @param string|array $item the cart item to remove. If it is a string, the string is considered 
      * as the cart_id and the item is removed from the cart based on it. If it is an array, the 

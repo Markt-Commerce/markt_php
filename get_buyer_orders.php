@@ -36,6 +36,7 @@ if(isset($_GET) && !empty($_GET["user_id"]) && !empty($_GET["user_type"])){
         $displayed_order["order_date"] = $buyer_orders[$i]["order_date"];
         $displayed_order["declined"] = empty($buyer_orders[$i]["seller_id"]) ? true : false;
         $displayed_order["accepted"] = boolval($buyer_orders[$i]["accepted"]);
+        $displayed_order["received_by_delivery"] = boolval($buyer_orders[$i]["received_by_delivery"]);
         if(empty($buyer_orders[$i]["delivery_id"])){
             $displayed_order["delivery_name"] = "";
             $displayed_order["delivery_id"] = "";
@@ -56,7 +57,7 @@ if(isset($_GET) && !empty($_GET["user_id"]) && !empty($_GET["user_type"])){
         else{
             //a placeholder image needs to be created and added here incase a product does
             //not have an image
-            $displayed_order["product_image"] = "";
+            $displayed_order["product_image"] = "placeholder-image";
         }
         $buyer_orders[$i] = $displayed_order;
     }
