@@ -14,6 +14,7 @@ function arrange_and_send_products($products){
     for($i = 0; $i < count($products);$i++){
         $new_product = new Product($products[$i]["product_id"]);
         $products[$i]["product_images"] = $new_product->get_images();
+        $products[$i]["tags"] = $new_product->get_tags();
         if(count($products[$i]["product_images"]) == 0){
             $products[$i]["product_images"][0] = "placeholder-image";
         }

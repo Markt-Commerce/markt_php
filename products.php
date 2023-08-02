@@ -4,6 +4,7 @@ namespace Markt;
 
 include_once "dbconnections/product_database_connections.php";
 include_once "dbconnections/product_images_database_connections.php";
+include_once "dbconnections/product_query_database_connections.php";
 include_once "image_handler.php";
 include_once "seller.php";
 
@@ -11,6 +12,7 @@ use Markt\DB\ProductDB;
 use Markt\DB\ProductImages;
 use Markt\ImageHandler;
 use Markt\Seller;
+use Markt\DB\ProductQueryDB;
 
 /**
  * Summary of Product
@@ -109,6 +111,12 @@ class Product{
     private $image_uploader;
 
     /**
+     * class to make queries to the product query database
+     * @var \Markt\DB\ProductQueryDB
+     */
+    private $query_database;
+
+    /**
      * creates a new product instance
      * @param string $product_id the id of the product.
      * If specified, the class looks through the database for the existing product populates itself i.e
@@ -119,6 +127,7 @@ class Product{
         $this->product_database = new ProductDB();
         $this->image_uploader = new ImageHandler();
         $this->product_images = new ProductImages();
+        $this->query_database = new ProductQueryDB();
         if(is_string($product_id)){
             $product = $this->product_database->get_product($product_id);
             if(is_array($product))
@@ -269,6 +278,54 @@ class Product{
             return $categories_with_tag;
         }
         return [];
+    }
+
+    /**
+     * Creates a new buyer query for a product
+     * @param array $query_details an associative array containing product query information. In the format:
+     * `$query_details["buyer_id"]`,`$query_details["message"]`,`$query_details["category"]`, 
+     * the `$query_details["category"]` is an array of categories the kind of product being queried is located
+     * @return array|bool
+     */
+    public function create_product_query($query_details){
+        $new_query = array();
+        $new_query["query_id"] = uniqid("query-",true);
+        $new_query["message"] = $query_details["message"];
+        $new_query["buyer_id"] = $query_details["buyer_id"];
+        $new_query["category"] = implode(",",$query_details["category"]);
+        $new_query["date_created"] = date('Y-m-d H:i:s');
+        $new_query["stale_time"] = time();
+        if($this->query_database->create_query($new_query)){
+            return $new_query;
+        }
+        return false;
+    }
+
+    /**
+     * Gets all product queries based on their category
+     * @param array $categories
+     * @return array
+     */
+    public function get_product_query_by_category($categories){
+        return $this->query_database->get_all_queries_based_on_category($categories);
+    }
+
+    /**
+     * Gets all product queries that a particular buyer had sent
+     * @param string $buyer_id
+     * @return array
+     */
+    public function get_buyer_product_queries($buyer_id){
+        return $this->query_database->get_all_queries_relating_to_buyer($buyer_id);
+    }
+
+    /**
+     * deletes a query based on its id
+     * @param string $query_id
+     * @return bool
+     */
+    public function delete_product_query($query_id){
+        return $this->query_database->delete_query($query_id);
     }
 
     /**
@@ -458,6 +515,19 @@ class Product{
     }
 
     /**
+     * updates multiple parts of a product
+     * @param string $product_id
+     * @param array $columns_to_update
+     * @param array $values
+     * @return bool
+     */
+    public function update_multiple_product($product_id = null,$columns_to_update,$values){
+        if(is_null($product_id))
+            return $this->product_database->update_multiple_product_values($this->product_id,$columns_to_update,$values);
+        return $this->product_database->update_multiple_product_values($product_id,$columns_to_update,$values);
+    }
+
+    /**
      * create images for products and store them on the and the database,
      * The product_id has to be set first before this function is called
      * @param array $Product_images Contains the images from `$_FILES` that 
@@ -465,6 +535,28 @@ class Product{
      * @return void
      */
     private function create_product_images($Product_images){
+        $all_images_names = $this->image_uploader->upload_multiple_images($Product_images);
+        if(!empty($all_images_names)){
+            for($i = 0;$i < count($all_images_names); $i++){
+                $Image = array();
+                $Image["image_id"] = uniqid("imageid-",true);
+                $Image["image_name"] = $all_images_names[$i];
+                $Image["product_id"] = $this->product_id;
+                $Image["date_uploaded"] = date("Y-m-d");
+                $this->product_images->create_image($Image);
+            }
+        }
+    }
+
+    /**
+     * add new product images for already existing products and store them
+     *  on the database,
+     * The product_id has to be set first before this function is called
+     * @param array $Product_images Contains the new images from `$_FILES` that 
+     * is to be uploaded.
+     * @return void
+     */
+    public function add_new_product_images($Product_images){
         $all_images_names = $this->image_uploader->upload_multiple_images($Product_images);
         if(!empty($all_images_names)){
             for($i = 0;$i < count($all_images_names); $i++){
@@ -499,6 +591,9 @@ class Product{
         }
     }
 
+    /**
+     * @return array
+     */
     public function get_tags(){
         return $this->tags;
     }

@@ -80,7 +80,7 @@ class buyer{
      * 
      * @var array
      */
-    public $buyer_payment_data_array;
+    public $buyer_payment_data_array = array();
 
     /** */
     public $house_number;

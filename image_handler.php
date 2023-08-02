@@ -37,6 +37,8 @@ class ImageHandler{
      * @return bool
      */
     private function is_valid_extension($file){
+        if(empty($file) || is_null($file))
+            return false;
         $file_extension = pathinfo(UPLOAD_DIRECTORY.$file["name"],PATHINFO_EXTENSION);
         return in_array($file_extension,$this->allowed_extensions);
     }
@@ -48,6 +50,8 @@ class ImageHandler{
      * @return bool
      */
     private function is_valid_size($file){
+        if(empty($file) || is_null($file))
+            return false;
         $filesize = $file["size"];
         return $filesize <= MAXSIZE && $filesize > 0;
     }
@@ -59,6 +63,8 @@ class ImageHandler{
      * @return bool
      */
     private function is_valid_mime_type($file){
+        if(empty($file) || is_null($file))
+            return false;
         $info = mime_content_type($file["tmp_name"]);
         return in_array($info,$this->allowed_mimes);
     }

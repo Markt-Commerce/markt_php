@@ -3,6 +3,9 @@
 header('Access-Control-Allow-Origin: http://localhost:4200');
 header('Access-Control-Allow-Headers:  Content-Type, X-Auth-Token, Authorization, Origin');
 header('Access-Control-Allow-Methods:  POST, PUT, GET');
+header('Access-Control-Allow-Credentials: true');
+
+session_id(hash("md5",uniqid()));
 
 require_once 'seller.php';
 require_once 'buyer.php';
@@ -26,9 +29,9 @@ if(isset($_POST) && !empty($_POST["user_type"])){
             $result["user_id"] = $buyer->get_buyer_id();
             $result["message"] = "ok";
             $result["profile_image"] = (empty($buyer->profile_image)) ? "profile-placeholder-image" : $buyer->profile_image;
-            setcookie("user_id",$buyer->get_buyer_id(),time()+60*60*2,"","",null,true);
-            setcookie("user_type","buyer",time()+60*60*2,"/","",null,true);
             session_start();
+            setcookie("user_id",$buyer->get_buyer_id(),time()+60*60*2,"","",false,true);
+            setcookie("user_type","buyer",time()+60*60*2,"","",false,true);
             echo json_encode($result);
         }
         else{ 
@@ -47,9 +50,9 @@ if(isset($_POST) && !empty($_POST["user_type"])){
             $result["user_id"] = $seller->get_seller_id();
             $result["message"] = "ok";
             $result["profile_image"] = (empty($seller->profile_image)) ? "profile-placeholder-image" : $seller->profile_image;
-            setcookie("user_id",$seller->get_seller_id(),time()+60*60*2,"","",null,true);
-            setcookie("user_type","seller",time()+60*60*2,"/","",null,true);
             session_start();
+            setcookie("user_id",$seller->get_seller_id(),time()+60*60*2,"","",false,true);
+            setcookie("user_type","seller",time()+60*60*2,"","",false,true);
             echo json_encode($result);
         }
         else{
@@ -68,9 +71,9 @@ if(isset($_POST) && !empty($_POST["user_type"])){
             $result["user_id"] = $delivery->get_delivery_id();
             $result["message"] = "ok";
             $result["profile_image"] = (empty($delivery->profile_image)) ? "profile-placeholder-image" : $delivery->profile_image;
-            setcookie("user_id",$delivery->get_delivery_id(),time()+60*60*2,"","",null,true);
-            setcookie("user_type","delivery",time()+60*60*2,"/","",null,true);
             session_start();
+            setcookie("user_id",$delivery->get_delivery_id(),time()+60*60*2,"","",false,true);
+            setcookie("user_type","delivery",time()+60*60*2,"","",false,true);
             echo json_encode($result);
         }
         else{

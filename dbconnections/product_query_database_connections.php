@@ -30,8 +30,8 @@ class ProductQueryDB{
                 id INT NOT NULL AUTO_INCREMENT, query_id VARCHAR(400) NOT NULL , 
                 buyer_id VARCHAR(400) NOT NULL , date_created DATETIME NOT NULL ,
                 message VARCHAR(400) NOT NULL, category VARCHAR(400) NOT NULL,
-                stale_time BIGINT NOT NULL
-                PRIMARY KEY (`id`))");
+                stale_time BIGINT NOT NULL,
+                PRIMARY KEY (id))");
         }
     }
 
@@ -41,7 +41,7 @@ class ProductQueryDB{
      * @param mixed $Productquerydata
      * @return \mysqli_result|bool
      */
-    public function create_order($Productquerydata){
+    public function create_query($Productquerydata){
         return mysqli_query($this->conn,"INSERT INTO product_query(
              query_id , buyer_id , date_created , message, category, stale_time 
             ) 
@@ -75,16 +75,16 @@ class ProductQueryDB{
 
     /**
      * Summary of get_all_queries_based_on_category
-     * @param mixed $categories
+     * @param array $categories
      * @return array
      */
     public function get_all_queries_based_on_category($categories){
-        $contat_str = "SELECT * FROM product_query WHERE category ";
+        $contat_str = "SELECT * FROM product_query WHERE category LIKE";
         for ($i=0; $i < count($categories)-1; $i++) { 
             $categories[$i] = mysqli_real_escape_string($this->conn,$categories[$i]);
-            $contat_str = $contat_str."LIKE '%{$categories[$i]}%' OR ";
+            $contat_str = $contat_str." '%{$categories[$i]}%' OR ";
         }
-        $contat_str = $contat_str."LIKE '%{$categories[count($categories)-1]}%'";
+        $contat_str = $contat_str." '%{$categories[count($categories)-1]}%'";
         $query = mysqli_query($this->conn,$contat_str);
         return mysqli_fetch_all($query,MYSQLI_ASSOC);
     }

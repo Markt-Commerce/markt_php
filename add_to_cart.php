@@ -32,7 +32,7 @@ if(isset($_POST) && $perfect_id && $perfect_user_type){
     }
 }
 else{
-    echo json_encode("some parameters are not set");
+    echo json_encode(false); 
 }
 
 ?>

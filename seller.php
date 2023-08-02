@@ -115,7 +115,7 @@ class Seller{
      * 
      * @var array
      */
-    public $seller_payment_data_array;
+    public $seller_payment_data_array = [];
 
     /** 
      * house/shop number of the seller

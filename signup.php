@@ -3,6 +3,9 @@
 header('Access-Control-Allow-Origin: http://localhost:4200');
 header('Access-Control-Allow-Headers:  Content-Type, X-Auth-Token, Authorization, Origin');
 header('Access-Control-Allow-Methods:  POST, PUT, GET');
+header('Access-Control-Allow-Credentials: true');
+
+session_id(hash("md5",uniqid()));
 
 include_once "buyer.php";
 require_once "seller.php";
@@ -31,14 +34,16 @@ if(isset($_POST)){
             $buyer->password = $_POST["password"];
             $buyer->postal_code = $_POST["postal_code"];
             $buyer->phone_number = $_POST["phone_number"];
-            $buyer->set_buyer_profile_image($_FILES["profile_image"]);
+            if (!empty($_FILES["profile_image"])) {
+                $buyer->set_buyer_profile_image($_FILES["profile_image"]);
+            }
             $buyer->state = $_POST["state"];
             if($buyer->create_new_buyer()){
                 session_start();
                 $_SESSION["user_id"] = $buyer->get_buyer_id();
                 $_SESSION["user_type"] = "buyer";
-                setcookie("user_id",$buyer->get_buyer_id(),time()+60*60*2,"","",null,true);
-                setcookie("user_type","buyer",time()+60*60*2,"/","",null,true);
+                setcookie("user_id",$buyer->get_buyer_id(),time()+60*60*2,"","",false,true);
+                setcookie("user_type","buyer",time()+60*60*2,"","",false,true);
                 $result_data = array();
                 $result_data["saved"] = true;
                 $result_data["user_id"] = $buyer->get_buyer_id();
@@ -70,7 +75,9 @@ if(isset($_POST)){
             $seller->password = $_POST["password"];
             $seller->phone_number = $_POST["phone_number"];
             $seller->postal_code = $_POST["postal_code"];
-            $seller->set_seller_profile_image($_FILES["profile_image"]); 
+            if (!empty($_FILES["profile_image"])) {
+                $seller->set_seller_profile_image($_FILES["profile_image"]); 
+            }
             $seller->shopname = $_POST["shopname"];
             $seller->state = $_POST["state"];
             $seller->street = $_POST["street"];
@@ -78,8 +85,8 @@ if(isset($_POST)){
                 session_start();
                 $_SESSION["user_id"] = $seller->get_seller_id();
                 $_SESSION["user_type"] = "seller";
-                setcookie("user_id",$seller->get_seller_id(),time()+60*60*2,"","",null,true);
-                setcookie("user_type","seller",time()+60*60*2,"/","",null,true);
+                setcookie("user_id",$seller->get_seller_id(),time()+60*60*2,"","",false,true);
+                setcookie("user_type","seller",time()+60*60*2,"","",false,true);
                 $result_data = array();
                 $result_data["saved"] = true;
                 $result_data["user_id"] = $seller->get_seller_id();
@@ -110,7 +117,9 @@ if(isset($_POST)){
             $delivery->password = $_POST["password"];
             $delivery->phone_number = $_POST["phone_number"];
             $delivery->postal_code = $_POST["postal_code"];
-            $delivery->set_delivery_profile_image($_FILES["profile_image"]);
+            if (!empty($_FILES["profile_image"])) {
+                $delivery->set_delivery_profile_image($_FILES["profile_image"]);
+            }
             $delivery->state = $_POST["state"];
             $delivery->street = $_POST["street"];
             $delivery->vehicle_type = $_POST["vehicle_type"];
@@ -119,8 +128,8 @@ if(isset($_POST)){
                 session_start();
                 $_SESSION["user_id"] = $delivery->get_delivery_id();
                 $_SESSION["user_type"] = "delivery";
-                setcookie("user_id",$delivery->get_delivery_id(),time()+60*60*2,"","",null,true);
-                setcookie("user_type","delivery",time()+60*60*2,"/","",null,true);
+                setcookie("user_id",$delivery->get_delivery_id(),time()+60*60*2,"","",false,true);
+                setcookie("user_type","delivery",time()+60*60*2,"","",false,true);
                 $result_data = array();
                 $result_data["saved"] = true;
                 $result_data["user_id"] = $delivery->get_delivery_id();

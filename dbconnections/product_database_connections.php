@@ -68,7 +68,7 @@ class ProductDB{
      * @return array
      */
     public function get_products_in_randomized_pack($packet_number){
-        $product_query = mysqli_query($this->conn, "SELECT * FROM products WHERE 1");
+        $product_query = mysqli_query($this->conn, "SELECT * FROM products WHERE product_quantity > 0");
         $all_products = mysqli_fetch_all($product_query,MYSQLI_ASSOC);
         $number_of_data = mysqli_num_rows($product_query);
         $randomized_products = array();
@@ -128,14 +128,14 @@ class ProductDB{
     public function get_product_using_category($category){
         $category = mysqli_real_escape_string($this->conn,$category);
         $product_query = mysqli_query($this->conn,"SELECT * FROM products 
-                                        WHERE product_category LIKE '%{$category}%'");
+                                        WHERE product_category LIKE '%{$category}%' AND product_quantity > 0");
         $result_products = mysqli_fetch_all($product_query,MYSQLI_ASSOC);
         return $result_products;
     }
 
     public function get_random_packets_of_product_using_category($category,$packet_number){
         $product_query = mysqli_query($this->conn, "SELECT * FROM products 
-                                                            WHERE product_category LIKE '%{$category}%'");
+                                                            WHERE product_category LIKE '%{$category}%' AND product_quantity > 0");
         $all_products = mysqli_fetch_all($product_query,MYSQLI_ASSOC);
         $number_of_data = mysqli_num_rows($product_query);
         $randomized_products = array();
@@ -169,7 +169,7 @@ class ProductDB{
     public function get_products_with_name($product_name){
         $product_name = mysqli_real_escape_string($this->conn,$product_name);
         $product_query = mysqli_query($this->conn,"SELECT * FROM products 
-                                        WHERE product_name LIKE '%{$product_name}%'");
+                                        WHERE product_name LIKE '%{$product_name}%' AND product_quantity > 0");
         $product = mysqli_fetch_all($product_query,MYSQLI_ASSOC);
         return $product;
     }
@@ -185,7 +185,7 @@ class ProductDB{
         $category = mysqli_real_escape_string($this->conn,$category);
         $product_query = mysqli_query($this->conn,"SELECT * FROM products 
                                         WHERE product_name LIKE '%{$product_name}%'
-                                        AND product_category LIKE '%{$category}%'");
+                                        AND product_category LIKE '%{$category}%' AND product_quantity > 0");
         $product = mysqli_fetch_all($product_query,MYSQLI_ASSOC);
         return $product;
     }
@@ -201,7 +201,7 @@ class ProductDB{
         $category = mysqli_real_escape_string($this->conn,$category);
         $product_query = mysqli_query($this->conn,"SELECT * FROM products 
                                         WHERE product_name LIKE '%{$product_name}%'
-                                        AND product_category LIKE '%{$category}%'");
+                                        AND product_category LIKE '%{$category}%' AND product_quantity > 0");
         return mysqli_num_rows($product_query);
     }
 
@@ -245,6 +245,35 @@ class ProductDB{
         $value = mysqli_real_escape_string($this->conn,$value);
         return mysqli_query($this->conn,"UPDATE products 
                                         SET {$column_to_be_updated} = '{$value}'
+                                        WHERE product_id = '{$product_id}'");
+    }
+
+    /** 
+     * update multiple parts of a product with any of the values and columns provided
+     * @param string $product_id the id of the product
+     * @param array $column_to_be_updated
+     * @param array $value
+     * @return boolean
+    */
+    public function update_multiple_product_values($product_id,$columns_to_be_updated,$values){
+        $conn_str = "SET";
+        $column_amount = count($columns_to_be_updated);
+        $value_amount = count($values);
+        for ($i=0; $i < $column_amount-1; $i++) { 
+            if (!is_string($values[$i])) {
+                $conn_str = $conn_str." {$columns_to_be_updated[$i]} = {$values[$i]},";
+            }
+            else{
+                $conn_str = $conn_str." {$columns_to_be_updated[$i]} = '{$values[$i]}',";
+            }
+        }
+        if (!is_string($values[$value_amount-1])) {
+            $conn_str = $conn_str." {$columns_to_be_updated[$column_amount-1]} = {$values[$value_amount-1]}";
+        }
+        else{
+            $conn_str = $conn_str." {$columns_to_be_updated[$column_amount-1]} = '{$values[$value_amount-1]}'";
+        }
+        return mysqli_query($this->conn,"UPDATE products ".$conn_str."
                                         WHERE product_id = '{$product_id}'");
     }
 

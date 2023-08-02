@@ -105,7 +105,7 @@ class delivery{
      * 
      * @var array
      */
-    public $delivery_payment_data_array;
+    public $delivery_payment_data_array = array();
 
     /** */
     public $house_number;

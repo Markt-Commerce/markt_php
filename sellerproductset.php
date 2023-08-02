@@ -10,16 +10,7 @@ use Markt\Product;
 
 $product = new Product();
 
-/**
- * Format of $_POST:
- * $_POST[
- *          seller_id(string),
- *          products[
- *                  product_images
- * ]
- * ]
- */
-if(isset($_POST) && isset($_POST["seller_id"])){
+if(isset($_POST) && isset($_POST["seller_id"]) && isset($_POST["product_name"])){
     $product_image = array();
     $product->desc_under = $_POST["desc_under"];
     $product->estimated_size = $_POST["estimated_size"];
