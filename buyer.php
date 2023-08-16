@@ -500,16 +500,19 @@ class buyer{
                         );
                     }
                 }
+            }
+            else{
+                $new_cart_item = array();
+                $new_cart_item["cart_id"] = uniqid("item-",true);
+                $new_cart_item["buyer_id"] = $this->unique_id;
+                $new_cart_item["product_id"] = $item;
+                $new_cart_item["quantity"] = 1;
+                $new_cart_item["has_discount"] = false;
+                $new_cart_item["discount_price"] = 0;
+                $new_cart_item["discount_percent"] = 0;
+                return $this->buyer_cart_connect->create_cart_item($new_cart_item);
+            }
         }
-        else{
-            $new_cart_item = array();
-            $new_cart_item["cart_id"] = uniqid("item-",true);
-            $new_cart_item["buyer_id"] = $this->unique_id;
-            $new_cart_item["product_id"] = $item;
-            $new_cart_item["quantity"] = 1;
-            return $this->buyer_cart_connect->create_cart_item($new_cart_item);
-        }
-    }
         elseif(is_array($item)){
             $item_exists = $this->buyer_cart_connect->item_already_exists($this->unique_id,$item["product_id"]);
             if($item_exists){
@@ -529,6 +532,9 @@ class buyer{
                 $new_cart_item["buyer_id"] = $this->unique_id;
                 $new_cart_item["product_id"] = $item["product_id"];
                 $new_cart_item["quantity"] = $item["quantity"];
+                $new_cart_item["has_discount"] = $item["has_discount"];
+                $new_cart_item["discount_price"] = $item["discount_price"];
+                $new_cart_item["discount_percent"] = $item["discount_percent"];
                 return $this->buyer_cart_connect->create_cart_item($new_cart_item);
             }
         }

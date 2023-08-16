@@ -95,6 +95,31 @@ class order{
     private $accepted;
 
     /**
+     * A boolean that shows whether the product ordered has a discount or has been bargained.
+     * Depending on whether this value is true or not, the other discount values `$discount_price` 
+     * and `$discount_percent`would be rendered useless and would not be checked.
+     * @var boolean
+     */
+    public $has_discount;
+
+    /**
+     * The new price of the product or products that are in this order.
+     * Can only be used or useful when `$has_discount` is true. 
+     * Is also co-dependent with `$discount_percent`
+     * @var float
+     */
+    public $discount_price;
+
+    /**
+     * The percentage decrease or increase of a product. A discount can also go the other way round i.e
+     * increase the actual price of the product. Just like `$discount_price`, it can only be useful when 
+     * `$has_discount` is `true`.
+     * Is also co-dependent with `$discount_price`
+     * @var float
+     */
+    public $discount_percent;
+
+    /**
      * An array containing the longtitude, latitude and a string containing the 
      * house number, street, city and country seperated by commas
      * @var array
@@ -198,6 +223,9 @@ class order{
         $this->receive_code = $Order_array["receive_code"];
         $this->received_by_delivery = $Order_array["received_by_delivery"];
         $this->order_date = $Order_array["order_date"];
+        $this->has_discount = $Order_array["has_discount"];
+        $this->discount_percent = $Order_array["discount_percent"];
+        $this->discount_price = $Order_array["discount_price"];
     }
 
     /**
@@ -219,6 +247,15 @@ class order{
             $new_order["received_by_delivery"] = false;
             $new_order["order_date"] = date("Y-m-d");
             $new_order["delivery_id"] = "";
+            $new_order["has_discount"] = $this->has_discount;
+            if ($this->has_discount) {
+                $new_order["discount_percent"] = $this->discount_percent;
+                $new_order["discount_price"] = $this->discount_price;
+            }
+            else{
+                $new_order["discount_percent"] = 0;
+                $new_order["discount_price"] = 0;
+            }
             return $this->order_db->create_order($new_order) && $this->create_order_track(
                                                             $this->seller_precise_address,
                                                             $this->buyer_precise_address);

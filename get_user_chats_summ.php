@@ -22,7 +22,7 @@ if(isset($_GET) && !empty($_GET["user_id"])){
         if(str_contains($allchats[$i]["user_id"],"seller")){
             $seller = new Seller($allchats[$i]["user_id"]);
             $allchats[$i]["user_name"] = $seller->shopname;
-            $allchats[$i]["user_profile_image"] = (!str_contains($seller->profile_image,"image") || empty($seller->profile_image)) ? "placeholder-image" : $seprofile_image;
+            $allchats[$i]["user_profile_image"] = (!str_contains($seller->profile_image,"image") || empty($seller->profile_image)) ? "placeholder-image" : $seller->profile_image;
             $allchats[$i]["user_type"] = "Seller";
         }
         elseif(str_contains($allchats[$i]["user_id"],"buyer")){

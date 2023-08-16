@@ -24,12 +24,18 @@ if(isset($_POST) && !empty($_POST["user_id"]) && !empty($_POST["user_type"])){
             $order->seller_id = $product->seller_id;
             $order->buyer_id = $buyer->get_buyer_id();
             $order->product_quantity = $cart_item["quantity"];
+            $order->has_discount = $cart_item["has_discount"];
+            $order->discount_percent = $cart_item["discount_percent"];
+            $order->discount_price = $cart_item["discount_price"];
             if($order->create_new_order()){
                 $successful_order = [];
                 $successful_order["product_name"] = $product->product_name;
                 $successful_order["product_quantity"] = $cart_item["quantity"];
                 $successful_order["product_price"] = $product->product_price;
                 $successful_order["seller_id"] = $product->seller_id;
+                $successful_order["has_discount"] = $cart_item["has_discount"];
+                $successful_order["discount_percent"] = $cart_item["discount_percent"];
+                $successful_order["discount_price"] = $cart_item["discount_price"];
                 array_push($successful_orders,$successful_order);
                 $buyer->remove_from_cart($cart_item);
             }

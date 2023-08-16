@@ -23,6 +23,9 @@ if(isset($_POST) && $perfect_id && $perfect_user_type){
             $cart = [];
             $cart["quantity"] = $_POST["quantity"];
             $cart["product_id"] = $_POST["product_id"];
+            $cart["has_discount"] = $_POST["has_discount"];
+            $cart["discount_price"] = $_POST["discount_price"];
+            $cart["discount_percent"] = $_POST["discount_percent"];
             $buyer = new buyer($_POST["user_id"]);
             echo json_encode($buyer->add_to_cart($cart));
         }

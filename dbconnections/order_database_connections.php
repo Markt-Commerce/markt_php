@@ -33,7 +33,8 @@ class orderDB{
                 product_quantity INT NOT NULL , received_by_delivery BOOLEAN NOT NULL , 
                 order_date DATE NOT NULL, receive_code VARCHAR(400) NOT NULL , 
                 delivered BOOLEAN NOT NULL , delivery_code VARCHAR(400) NOT NULL , 
-                accepted BOOLEAN NOT NULL , PRIMARY KEY (`id`))");
+                accepted BOOLEAN NOT NULL , has_discount BOOLEAN NOT NULL , 
+                discount_price FLOAT NOT NULL , discount_percent FLOAT NOT NULL , PRIMARY KEY (id))");
         }
     }
 
@@ -46,13 +47,16 @@ class orderDB{
         return mysqli_query($this->conn,"INSERT INTO orders(
             order_id, seller_id, buyer_id, delivery_id, 
             product_id, product_quantity, received_by_delivery, order_date, receive_code, 
-            delivered, delivery_code, accepted) 
+            delivered, delivery_code, accepted, has_discount, 
+                discount_price, discount_percent) 
             VALUES (
             '{$Orderdata["order_id"]}','{$Orderdata["seller_id"]}','{$Orderdata["buyer_id"]}',
             '{$Orderdata["delivery_id"]}','{$Orderdata["product_id"]}','{$Orderdata["product_quantity"]}',
             '{$Orderdata["received_by_delivery"]}','{$Orderdata["order_date"]}',
             '{$Orderdata["receive_code"]}','{$Orderdata["delivered"]}',
-            '{$Orderdata["delivery_code"]}','{$Orderdata["accepted"]}')");
+            '{$Orderdata["delivery_code"]}','{$Orderdata["accepted"]}',
+                '{$Orderdata["has_discount"]}','{$Orderdata["discount_price"]}',
+                '{$Orderdata["discount_percent"]}')");
     }
 
     /**

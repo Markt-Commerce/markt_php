@@ -26,6 +26,9 @@ if(isset($_GET) && isset($_GET["user_type"]) && isset($_GET["user_id"])){
         $displayed_order["seller_id"] = $unaccepted_orders[$i]["seller_id"];
         $displayed_order["product_quantity"] = $unaccepted_orders[$i]["product_quantity"];
         $displayed_order["order_date"] = $unaccepted_orders[$i]["order_date"];
+        $displayed_order["has_discount"] = $unaccepted_orders[$i]["has_discount"];
+        $displayed_order["discount_percent"] = $unaccepted_orders[$i]["discount_percent"];
+        $displayed_order["discount_price"] = $unaccepted_orders[$i]["discount_price"];
         $product = new Product($unaccepted_orders[$i]["product_id"]);
         $displayed_order["product_name"] = $product->product_name;
         $displayed_order["product_price"] = $product->product_price;

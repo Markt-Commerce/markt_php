@@ -27,19 +27,17 @@ if(isset($_GET) && isset($_GET["user_type"]) && isset($_GET["user_id"])){
         $displayed_order["seller_id"] = $accepted_orders[$i]["seller_id"];
         $displayed_order["product_quantity"] = $accepted_orders[$i]["product_quantity"];
         $displayed_order["order_date"] = $accepted_orders[$i]["order_date"];
+        $displayed_order["has_discount"] = $accepted_orders[$i]["has_discount"];
+        $displayed_order["discount_percent"] = $accepted_orders[$i]["discount_percent"];
+        $displayed_order["discount_price"] = $accepted_orders[$i]["discount_price"];
         $product = new Product($accepted_orders[$i]["product_id"]);
         $displayed_order["product_name"] = $product->product_name;
         $displayed_order["product_price"] = $product->product_price;
         $displayed_order["product_id"] = $product->get_product_id();
         $displayed_order["product_image"] = $product->get_images();
-        if(!empty($displayed_order["product_image"][0]["image_name"])){
-            $displayed_order["product_image"] = $displayed_order["product_image"][0]["image_name"];
-        }
-        else{
-            //a placeholder image needs to be created and added here incase a product does
-            //not have an image
-            $displayed_order["product_image"] = "placeholder-image";
-        }
+        //a placeholder image needs to be created and added here incase a product does
+        //not have an image
+        $displayed_order["product_image"] = (!empty($displayed_order["product_image"][0]["image_name"])) ? $displayed_order["product_image"][0]["image_name"] : "placeholder-image";
         $buyer = new buyer($accepted_orders[$i]["buyer_id"]);
         $displayed_order["buyer_id"] = $buyer->get_buyer_id();
         $displayed_order["buyer_name"] = $buyer->username;

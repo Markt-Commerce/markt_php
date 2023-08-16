@@ -25,7 +25,7 @@ if(isset($_GET) && $perfect_id && $perfect_user_type){
                 $seller = new Seller($buyer->favorites[$i]["favorite_id"]);
                 $favorites[$i]["favorite_type"] = "seller";
                 $favorites[$i]["name"] = $seller->shopname;
-                $favorites[$i]["profile_image"] = $seller->profile_image; 
+                $favorites[$i]["profile_image"] = (empty($seller->profile_image)) ? "profile-placeholder-image" :$seller->profile_image;
                 $favorites[$i]["favorite_id"] = $seller->get_seller_id(); 
             }
             elseif($buyer->favorites[$i]["favorite_type"] == "product"){
@@ -33,7 +33,8 @@ if(isset($_GET) && $perfect_id && $perfect_user_type){
                 $favorites[$i]["favorite_type"] = "product";
                 $favorites[$i]["name"] = $product->product_name;
                 $favorites[$i]["favorite_id"] = $product->get_product_id();
-                $favorites[$i]["profile_image"] = $product->get_images()[0];
+                //$profile_image = $product->get_images()[0];
+                $favorites[$i]["profile_image"] = (empty($product->get_images()[0])) ? "placeholder-image" : $product->get_images()[0]["image_name"];
             }
         }
         echo json_encode($favorites);

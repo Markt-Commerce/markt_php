@@ -26,7 +26,9 @@ class CartDB{
             $this->query_cart = mysqli_query($this->conn,"CREATE TABLE IF NOT EXISTS cart (
                 id INT NOT NULL AUTO_INCREMENT , cart_id VARCHAR(400) NOT NULL , 
                 buyer_id VARCHAR(400) NOT NULL , product_id VARCHAR(400) NOT NULL , 
-                quantity INT NOT NULL , PRIMARY KEY (`id`))");
+                quantity INT NOT NULL , has_discount BOOLEAN NOT NULL , 
+                discount_price FLOAT NOT NULL , discount_percent FLOAT NOT NULL , 
+                PRIMARY KEY (`id`))");
         }
     }
 
@@ -43,9 +45,12 @@ class CartDB{
      */
     public function create_cart_item($Cart){
         return mysqli_query($this->conn,"INSERT INTO cart(
-            cart_id, buyer_id, product_id, quantity) VALUES (
+            cart_id, buyer_id, product_id, quantity, has_discount, 
+                discount_price, discount_percent) VALUES (
                 '{$Cart["cart_id"]}','{$Cart["buyer_id"]}',
-                '{$Cart["product_id"]}','{$Cart["quantity"]}')");
+                '{$Cart["product_id"]}','{$Cart["quantity"]}',
+                '{$Cart["has_discount"]}','{$Cart["discount_price"]}',
+                '{$Cart["discount_percent"]}')");
     }
 
     /**
