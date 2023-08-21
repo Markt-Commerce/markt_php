@@ -40,6 +40,19 @@ class ChatConnection implements MessageComponentInterface{
                 }
             }
         }
+        elseif (!empty($new_message["type"]) && $new_message["type"] == "product_wt_discount") {
+            if(!empty($new_message["sent_to"]) && !empty($new_message["sent_from"]) && !empty($new_message["message"])){
+                if($this->messageclients->contains($from)){
+                    $chat = new Chat($new_message);
+                    $chat->send_message($new_message["sent_to"]);
+                    foreach($this->messageclients as $message_client){
+                        if($this->messageclients[$message_client] == $new_message["sent_to"] || $this->messageclients[$message_client] == $new_message["sent_from"]){
+                            $message_client->send($message);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public function onClose(ConnectionInterface $conn){

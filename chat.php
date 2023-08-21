@@ -53,6 +53,12 @@ class Chat{
     public $sent_from;
 
     /**
+     * the type of message being sent can only either be a message or product
+     * @var string
+     */
+    public $type;
+
+    /**
      * a connection to the chat database to store the chat information
      */
     private $connection_to_db;
@@ -159,7 +165,7 @@ class Chat{
         $chat["send_date_and_time"] = $this->send_date_and_time;
         $chat["status"] = "sent";
         $chat["sent_from"] = $this->sent_from;
-
+        $chat["type"] = (empty($this->type)) ? "message" : $this->type;
         return $this->connection_to_db->create_chat($chat);
     }
 
@@ -173,7 +179,7 @@ class Chat{
         if($user_id = $chat["sent_from"])
             return $this->connection_to_db->delete_chat($chat["message_id"]);
         return false;
-    } 
+    }
 
 }
 

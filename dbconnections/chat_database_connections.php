@@ -34,6 +34,7 @@ class chatDB{
             sent_to VARCHAR(400) NOT NULL , attached_file VARCHAR(400) NOT NULL , 
             message VARCHAR(400) NOT NULL , send_date_and_time DATETIME NOT NULL , 
             status VARCHAR(255) NOT NULL , sent_from VARCHAR(400) NOT NULL , 
+            type VARCHAR(400) NOT NULL
             PRIMARY KEY (`id`))");
         }
     }
@@ -53,12 +54,13 @@ class chatDB{
         $Chat["send_date_and_time"] = mysqli_real_escape_string($this->conn,$Chat["send_date_and_time"]);
         $Chat["status"] = mysqli_real_escape_string($this->conn,$Chat["status"]);
         $Chat["sent_from"] = mysqli_real_escape_string($this->conn,$Chat["sent_from"]);
+        $Chat["sent_from"] = mysqli_real_escape_string($this->conn,$Chat["type"]);
         return mysqli_query($this->conn,"INSERT INTO chats(
             message_id, sent_to, attached_file, message, 
             send_date_and_time, status, sent_from) 
             VALUES ('{$Chat["message_id"]}','{$Chat["sent_to"]}',
             '{$Chat["attached_file"]}','{$Chat["message"]}','{$Chat["send_date_and_time"]}',
-            '{$Chat["status"]}','{$Chat["sent_from"]}')");
+            '{$Chat["status"]}','{$Chat["sent_from"]}','{$Chat["type"]}')");
     }
 
     /**
